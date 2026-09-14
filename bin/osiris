@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+OSIRIS_ENTRYPOINT="${BASH_SOURCE[0]}"
+while [[ -L "$OSIRIS_ENTRYPOINT" ]]; do
+    OSIRIS_ENTRYPOINT_DIR="$(cd -- "$(dirname -- "$OSIRIS_ENTRYPOINT")" && pwd)"
+    OSIRIS_LINK="$(readlink "$OSIRIS_ENTRYPOINT")"
+    if [[ "$OSIRIS_LINK" == /* ]]; then
+        OSIRIS_ENTRYPOINT="$OSIRIS_LINK"
+    else
+        OSIRIS_ENTRYPOINT="$OSIRIS_ENTRYPOINT_DIR/$OSIRIS_LINK"
+    fi
+done
+
+OSIRIS_ROOT="$(cd -- "$(dirname -- "$OSIRIS_ENTRYPOINT")/.." && pwd)"
+# shellcheck source=../lib/osiris.sh
+source "$OSIRIS_ROOT/lib/osiris.sh"
+source "$OSIRIS_ROOT/lib/tui.sh"
+
+osiris_main "$@"
