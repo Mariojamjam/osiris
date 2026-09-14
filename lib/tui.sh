@@ -99,13 +99,20 @@ interactive_clone() {
     require_fzf
     session_dir="$(mktemp -d "${TMPDIR:-/tmp}/osiris.XXXXXX")"
     fetcher_pid="$(start_repository_fetcher "$owner" "$all_repositories" "$session_dir")"
+    OSIRIS_ACTIVE_FETCHER_PID="$fetcher_pid"
+    OSIRIS_ACTIVE_SESSION_DIR="$session_dir"
 
     cleanup_repository_session() {
-        if kill -0 "$fetcher_pid" 2>/dev/null; then
-            kill "$fetcher_pid" 2>/dev/null || true
+        if [[ -n "${OSIRIS_ACTIVE_FETCHER_PID:-}" ]] && kill -0 "$OSIRIS_ACTIVE_FETCHER_PID" 2>/dev/null; then
+            kill "$OSIRIS_ACTIVE_FETCHER_PID" 2>/dev/null || true
         fi
-        wait "$fetcher_pid" 2>/dev/null || true
-        rm -rf -- "$session_dir"
+        if [[ -n "${OSIRIS_ACTIVE_FETCHER_PID:-}" ]]; then
+            wait "$OSIRIS_ACTIVE_FETCHER_PID" 2>/dev/null || true
+        fi
+        if [[ -n "${OSIRIS_ACTIVE_SESSION_DIR:-}" && -d "$OSIRIS_ACTIVE_SESSION_DIR" ]]; then
+            rm -rf -- "$OSIRIS_ACTIVE_SESSION_DIR"
+        fi
+        unset OSIRIS_ACTIVE_FETCHER_PID OSIRIS_ACTIVE_SESSION_DIR
     }
     trap cleanup_repository_session EXIT
 
