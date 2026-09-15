@@ -132,6 +132,7 @@ Usage:
   osiris list                    Select and clone an owned repository interactively
   osiris list --all              Select and clone any accessible repository
   osiris owners                  List accessible users and organizations
+  osiris create                  Create a GitHub repository interactively
   osiris clone PROJECT           Clone one of the user's repositories
   osiris clone PROJECT DIRECTORY Clone a repository into DIRECTORY
   osiris clone OWNER/PROJECT     Clone a repository from any accessible owner
@@ -142,8 +143,9 @@ Usage:
 Examples:
   osiris list
   osiris list --all
-  osiris clone aquatic_mobile_app
-  osiris clone hand-of-god ~/Projects/hand-of-god
+  osiris create
+  osiris clone example-project
+  osiris clone example-org/example-project ~/Projects/example-project
 EOF
 }
 
@@ -195,6 +197,13 @@ osiris_main() {
             require_gh
             require_authentication
             list_owners
+            ;;
+        create)
+            [[ $# -eq 1 ]] || osiris_error "The create command does not accept arguments."
+            require_gh
+            require_authentication
+            owner="$(authenticated_user)"
+            create_repository "$owner"
             ;;
         clone)
             shift
