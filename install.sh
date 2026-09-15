@@ -68,8 +68,10 @@ install_osiris() {
     cp "$OSIRIS_ROOT/lib/osiris.sh" "$INSTALL_ROOT/lib/osiris.sh"
     cp "$OSIRIS_ROOT/lib/tui.sh" "$INSTALL_ROOT/lib/tui.sh"
     cp "$OSIRIS_ROOT/lib/tui-page.sh" "$INSTALL_ROOT/lib/tui-page.sh"
+    cp "$OSIRIS_ROOT/lib/create.sh" "$INSTALL_ROOT/lib/create.sh"
+    cp "$OSIRIS_ROOT/lib/create-header.sh" "$INSTALL_ROOT/lib/create-header.sh"
     cp "$OSIRIS_ROOT/bin/osiris" "$INSTALL_ROOT/bin/osiris"
-    chmod 755 "$INSTALL_ROOT/bin/osiris" "$INSTALL_ROOT/lib/osiris.sh" "$INSTALL_ROOT/lib/tui.sh" "$INSTALL_ROOT/lib/tui-page.sh"
+    chmod 755 "$INSTALL_ROOT/bin/osiris" "$INSTALL_ROOT/lib/osiris.sh" "$INSTALL_ROOT/lib/tui.sh" "$INSTALL_ROOT/lib/tui-page.sh" "$INSTALL_ROOT/lib/create.sh" "$INSTALL_ROOT/lib/create-header.sh"
     ln -sfn "$INSTALL_ROOT/bin/osiris" "$BIN_DIR/osiris"
 
     touch "$PROFILE_FILE"
