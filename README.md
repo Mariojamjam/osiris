@@ -107,6 +107,17 @@ into the current directory.
 
 This is the shortest form for repositories owned by the authenticated user.
 
+### Create a remote repository
+
+```bash
+osiris create
+```
+
+Opens a small interactive form. Enter the repository name, use the Left and
+Right arrow keys to choose `private` or `public`, and confirm the operation.
+After creation, Osiris asks whether the new repository should also be cloned
+into the current directory.
+
 ### Clone into a specific directory
 
 ```bash
@@ -199,6 +210,7 @@ The supported command structure is intentionally explicit:
 osiris list
 osiris list --all
 osiris owners
+osiris create
 osiris clone PROJECT
 osiris clone OWNER/PROJECT
 osiris --auth
