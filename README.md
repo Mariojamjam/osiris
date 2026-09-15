@@ -255,9 +255,15 @@ It preserves:
 ## Project layout
 
 ```text
-bin/osiris       Installed command entry point
-lib/osiris.sh    Command routing, GitHub operations, and validation
-lib/tui.sh       fzf-based interactive selector
-install.sh       Dependency and user-local installation
-uninstall.sh     Osiris-only uninstallation
+osiris.sh                 Main entrypoint and command dispatcher
+bin/osiris                Installed command launcher
+commands/list/            Repository listing command and list TUI
+commands/owners/          Accessible owners command
+commands/create/          Remote repository creation and create TUI
+commands/clone/           Repository clone command
+lib/core.sh               Shared errors, version, and help
+lib/github.sh             GitHub authentication helpers
+lib/dependencies.sh       gh and fzf dependency checks
+install.sh                Dependency and user-local installation
+uninstall.sh              Osiris-only uninstallation
 ```

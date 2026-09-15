@@ -39,9 +39,7 @@ wait_for_page() {
     local page_file="$session_dir/page-${page}.tsv"
 
     while [[ ! -f "$page_file" ]]; do
-        if [[ -f "$session_dir/error" ]]; then
-            return 1
-        fi
+        [[ -f "$session_dir/error" ]] && return 1
         if ! kill -0 "$fetcher_pid" 2>/dev/null; then
             [[ -f "$page_file" ]] && break
             return 1
@@ -71,18 +69,12 @@ reload_page() {
                 (( target_page > last_page )) && target_page="$current_page"
             fi
             ;;
-        left)
-            (( current_page > 1 )) && target_page=$((current_page - 1))
-            ;;
-        *)
-            exit 2
-            ;;
+        left) (( current_page > 1 )) && target_page=$((current_page - 1)) ;;
+        *) exit 2 ;;
     esac
 
     if (( target_page != current_page )); then
-        if ! wait_for_page "$session_dir" "$target_page" "$fetcher_pid"; then
-            target_page="$current_page"
-        fi
+        wait_for_page "$session_dir" "$target_page" "$fetcher_pid" || target_page="$current_page"
     fi
 
     printf '%s\n' "$target_page" >"$session_dir/current-page"
@@ -90,14 +82,7 @@ reload_page() {
 }
 
 case "${1:-}" in
-    render)
-        format_page "$2" "$3" "$4" "$5"
-        ;;
-    reload)
-        reload_page "$2" "$3" "$4" "$5" "$6"
-        ;;
-    *)
-        printf 'Usage: tui-page.sh {render|reload} ...\n' >&2
-        exit 2
-        ;;
+    render) format_page "$2" "$3" "$4" "$5" ;;
+    reload) reload_page "$2" "$3" "$4" "$5" "$6" ;;
+    *) printf 'Usage: list-tui-page.sh {render|reload} ...\n' >&2; exit 2 ;;
 esac

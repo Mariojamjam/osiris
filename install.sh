@@ -64,14 +64,13 @@ install_fzf() {
 }
 
 install_osiris() {
-    mkdir -p "$INSTALL_ROOT/bin" "$INSTALL_ROOT/lib" "$BIN_DIR"
-    cp "$OSIRIS_ROOT/lib/osiris.sh" "$INSTALL_ROOT/lib/osiris.sh"
-    cp "$OSIRIS_ROOT/lib/tui.sh" "$INSTALL_ROOT/lib/tui.sh"
-    cp "$OSIRIS_ROOT/lib/tui-page.sh" "$INSTALL_ROOT/lib/tui-page.sh"
-    cp "$OSIRIS_ROOT/lib/create.sh" "$INSTALL_ROOT/lib/create.sh"
-    cp "$OSIRIS_ROOT/lib/create-header.sh" "$INSTALL_ROOT/lib/create-header.sh"
+    rm -rf -- "$INSTALL_ROOT/lib" "$INSTALL_ROOT/commands"
+    mkdir -p "$INSTALL_ROOT/bin" "$INSTALL_ROOT/lib" "$INSTALL_ROOT/commands" "$BIN_DIR"
+    cp "$OSIRIS_ROOT/osiris.sh" "$INSTALL_ROOT/osiris.sh"
+    cp -R "$OSIRIS_ROOT/lib/." "$INSTALL_ROOT/lib/"
+    cp -R "$OSIRIS_ROOT/commands/." "$INSTALL_ROOT/commands/"
     cp "$OSIRIS_ROOT/bin/osiris" "$INSTALL_ROOT/bin/osiris"
-    chmod 755 "$INSTALL_ROOT/bin/osiris" "$INSTALL_ROOT/lib/osiris.sh" "$INSTALL_ROOT/lib/tui.sh" "$INSTALL_ROOT/lib/tui-page.sh" "$INSTALL_ROOT/lib/create.sh" "$INSTALL_ROOT/lib/create-header.sh"
+    find "$INSTALL_ROOT" -type f -name '*.sh' -exec chmod 755 {} +
     ln -sfn "$INSTALL_ROOT/bin/osiris" "$BIN_DIR/osiris"
 
     touch "$PROFILE_FILE"

@@ -14,9 +14,4 @@ while [[ -L "$OSIRIS_ENTRYPOINT" ]]; do
 done
 
 OSIRIS_ROOT="$(cd -- "$(dirname -- "$OSIRIS_ENTRYPOINT")/.." && pwd)"
-# shellcheck source=../lib/osiris.sh
-source "$OSIRIS_ROOT/lib/osiris.sh"
-source "$OSIRIS_ROOT/lib/tui.sh"
-source "$OSIRIS_ROOT/lib/create.sh"
-
-osiris_main "$@"
+exec "$OSIRIS_ROOT/osiris.sh" "$@"
